@@ -280,8 +280,9 @@ if("serviceWorker" in navigator){
 const VAPID = "BGIzWRbaQpVpjgLLSrwKM8oVTh2-4-GGH5t2I_JE4OMDEcmJLZfwJ03ZSs4BNqttOt7uJrPrrVd-xYTlHDD2zsA";
 const b64u = s => { const p = "=".repeat((4 - s.length % 4) % 4); const r = atob((s + p).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(r, c => c.charCodeAt(0)); };
 const standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
-async function showSub(sub){ $("alCode").value = JSON.stringify(sub); $("alOut").hidden = false; $("alBtn").hidden = true;
- $("alTxt").textContent = "Job alerts are on for this phone."; }
+// Once alerts are on, just say so. The setup code only appears straight after turning alerts on for the first time.
+async function showSub(sub, fresh){ $("alBtn").hidden = true; $("alTxt").textContent = "Job alerts are on for this phone.";
+ if(fresh){ $("alCode").value = JSON.stringify(sub); $("alOut").hidden = false; } }
 if(!("serviceWorker" in navigator && "PushManager" in window)){
  $("alBtn").hidden = true;
  $("alTxt").textContent = standalone
@@ -296,7 +297,7 @@ if(!("serviceWorker" in navigator && "PushManager" in window)){
    if(perm !== "granted"){ $("alTxt").textContent = "Notifications weren't allowed. You can turn them on in Settings, Notifications, Teacher Jobs."; return; }
    const reg = await navigator.serviceWorker.ready;
    const sub = await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:b64u(VAPID)});
-   showSub(sub);
+   showSub(sub, true);
   }catch(e){ $("alTxt").textContent = "Couldn't turn on alerts: " + (e && e.message || e); }
  });
  $("alCopy").addEventListener("click", async ()=>{
