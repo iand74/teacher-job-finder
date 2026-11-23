@@ -33,6 +33,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 input[type=range]{width:100%;accent-color:var(--mag);min-height:44px}
 .rad{display:flex;justify-content:space-between;align-items:baseline}
 .rad b{font-size:22px;white-space:nowrap}
+.hint{font-size:13px;color:var(--mute);margin:6px 0 0}
 .msg{font-size:14px;color:var(--brown);min-height:1.4em;margin:6px 0 10px}
 .chk{display:flex;gap:8px;align-items:center;font-weight:400;font-size:14px;min-height:44px}
 .chk input{width:20px;height:20px;accent-color:var(--mag)}
@@ -78,7 +79,8 @@ footer{font-size:13px;color:var(--mute)}
   <div class="panel">
    <form id="f">
     <label for="pc">Your postcode</label>
-    <div class="row"><input id="pc" type="text" value="HX4 8LG" autocomplete="postal-code" spellcheck="false"><button type="submit">Search</button></div>
+    <div class="row"><input id="pc" type="text" value="HX4 8LG" autocomplete="postal-code" spellcheck="false"><button type="submit">Show jobs</button></div>
+    <p class="hint">Enter any postcode within about 30 miles of Halifax and choose how far you'd travel. The job list itself is refreshed every morning.</p>
     <div class="msg" id="msg" role="status"></div>
     <div class="rad"><label for="r">Search radius</label><b id="rv">10 miles</b></div>
     <input id="r" type="range" min="2" max="30" step="1" value="10">
@@ -228,7 +230,7 @@ async function loadJobs(){
   const d = await r.json();
   JOBS = Array.isArray(d.jobs)?d.jobs:[]; UPDATED = d.updated?new Date(d.updated):null;
   $("upd").textContent = UPDATED ? "Job list last updated "+UPDATED.toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
- }catch(_){ $("upd").textContent = "Couldn't load the job list. Check your connection and tap Search again."; }
+ }catch(_){ $("upd").textContent = "Couldn't load the job list. Check your connection and tap Show jobs again."; }
  render();
 }
 loadJobs();
