@@ -1,0 +1,27 @@
+name: Job alerts
+on:
+  push:
+    branches: [main]
+    paths: [jobs.json]
+  workflow_dispatch:
+    inputs:
+      test:
+        description: "Send a test notification"
+        type: boolean
+        default: true
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pywebpush
+      - run: python scripts/notify.py
+        env:
+          PUSH_SUBSCRIPTION: ${{ secrets.PUSH_SUBSCRIPTION }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          TEST: ${{ github.event_name == 'workflow_dispatch' && inputs.test }}

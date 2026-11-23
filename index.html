@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Primary Teacher Job Finder</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Teacher Jobs">
+<meta name="theme-color" content="#d6127e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -55,6 +61,11 @@ h2{font-size:22px;margin:28px 0 4px}
 .tags{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
 .tag{font-size:13px;padding:2px 9px;border-radius:99px;border:1px solid var(--line);white-space:nowrap}
 .tag.ft{background:var(--ok);color:var(--card);border-color:transparent}
+.tag.new{background:var(--mag);color:#fff;border-color:transparent;font-weight:800}
+.newb{display:none;margin:0 0 16px;padding:12px 16px;border-radius:12px;background:var(--mag);color:#fff;font-weight:600}
+.newb.on{display:block}
+.alerts{margin-top:24px}
+textarea{width:100%;font:13px/1.4 ui-monospace,Menlo,monospace;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);margin:0 0 8px}
 .tag.warn{color:var(--brown);border-color:var(--brown)}
 .about{font-size:15px;margin:4px 0;grid-column:2/4}
 .meta{grid-column:2/4;font-size:14px;color:var(--mute)}
@@ -74,6 +85,7 @@ footer{font-size:13px;color:var(--mute)}
 <div class="band">
  <h1 id="title">Primary teaching jobs near HX4 8LG</h1>
  <p class="upd" id="upd" role="status"></p>
+ <div class="newb" id="newb" role="status"></div>
  <p class="sub">Class teacher vacancies at junior, infant and primary schools. Full-time posts first, then maternity cover and part-time, nearest first within each group.</p>
  <div class="top">
   <div class="panel">
@@ -89,6 +101,17 @@ footer{font-size:13px;color:var(--mute)}
    <div class="stats"><div><b id="sFt">0</b>full time</div><div><b id="sOt">0</b>part time / cover</div><div><b id="sNear">–</b>nearest</div></div>
   </div>
   <div class="fig" id="fig" aria-label="Map of jobs around your postcode"><svg id="map"></svg></div>
+ </div>
+
+ <div class="panel alerts" id="alerts" hidden>
+  <h2 style="margin-top:0">Job alerts on this iPhone</h2>
+  <p class="note" id="alTxt">Get a notification, and a number on the app icon, when the morning update finds new jobs.</p>
+  <button type="button" id="alBtn">Turn on job alerts</button>
+  <div id="alOut" hidden>
+   <p class="note">Alerts are allowed. Last step: copy this code and paste it into GitHub as the secret <b>PUSH_SUBSCRIPTION</b>. You only do this once.</p>
+   <textarea id="alCode" readonly rows="5"></textarea>
+   <button type="button" id="alCopy">Copy code</button> <span id="alCopied" class="note"></span>
+  </div>
  </div>
 
  <h2>Full-time posts</h2>
@@ -121,7 +144,7 @@ const PC = {"HX48LG":[53.6763,-1.8642],
  WF13:[53.684,-1.650],WF14:[53.680,-1.695],WF15:[53.706,-1.715],WF16:[53.703,-1.678],WF17:[53.714,-1.632],WF12:[53.685,-1.610],
  OL14:[53.713,-2.098],OL15:[53.645,-2.100],OL3:[53.580,-2.010],LS12:[53.795,-1.590],LS27:[53.748,-1.600],LS28:[53.810,-1.665]};
 
-let JOBS = [], UPDATED = null;
+let JOBS = [], UPDATED = null; const NEW = new Set();
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -156,7 +179,7 @@ function render(){
   return `<article class="job ${tier}${closed?" closed":""}">
    <div class="num">${i+1}</div>
    <div><h3>${esc(j.title)}</h3><div class="school">${esc(j.school)}</div>
-    <div class="tags"><span class="tag ${isFT(j)?"ft":"warn"}">${esc(j.pattern)}</span>${j.fixed?'<span class="tag warn">Fixed term</span>':""}<span class="tag">${esc(j.contract)}</span>${closed?'<span class="tag warn">Closed</span>':`<span class="tag">Closes ${esc(j.closesTxt)}</span>`}</div></div>
+    <div class="tags">${NEW.has(j.url)?'<span class="tag new">New</span>':""}<span class="tag ${isFT(j)?"ft":"warn"}">${esc(j.pattern)}</span>${j.fixed?'<span class="tag warn">Fixed term</span>':""}<span class="tag">${esc(j.contract)}</span>${closed?'<span class="tag warn">Closed</span>':`<span class="tag">Closes ${esc(j.closesTxt)}</span>`}</div></div>
    <div class="dist"><b>≈ ${dm} min</b>${j.d.toFixed(1)} mi away${j.approx?" (approx.)":""}</div>
    <p class="about">${esc(j.about)}</p>
    <div class="meta">${esc(j.place)} · Salary: ${esc(j.salary)}${j.extra?" · "+esc(j.extra):""}</div>
@@ -229,9 +252,53 @@ async function loadJobs(){
   if(!r.ok) throw 0;
   const d = await r.json();
   JOBS = Array.isArray(d.jobs)?d.jobs:[]; UPDATED = d.updated?new Date(d.updated):null;
+  await markNew();
   $("upd").textContent = UPDATED ? "Job list last updated "+UPDATED.toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
  }catch(_){ $("upd").textContent = "Couldn't load the job list. Check your connection and tap Show jobs again."; }
  render();
+}
+// "New since your last visit": remembered per phone in the browser's cache storage (shared with the background checker)
+async function getSeen(){try{const c=await caches.open("tjf-state");const r=await c.match("seen");return r?await r.json():null;}catch(_){return null;}}
+async function putSeen(ids){try{const c=await caches.open("tjf-state");await c.put("seen",new Response(JSON.stringify(ids)));}catch(_){}}
+async function markNew(){
+ const ids = JOBS.filter(j=>!isClosed(j)).map(j=>j.url);
+ const seen = await getSeen();
+ if(seen) ids.forEach(id=>{if(!seen.includes(id)) NEW.add(id);});
+ const n = JOBS.filter(j=>NEW.has(j.url)&&!isClosed(j)).length;
+ $("newb").textContent = n ? (n===1?"1 new job":n+" new jobs")+" since your last visit, marked New below." : "";
+ $("newb").classList.toggle("on",n>0);
+ await putSeen(Array.from(new Set([...(seen||[]),...ids])));
+ try{ if(navigator.clearAppBadge) navigator.clearAppBadge(); }catch(_){}
+}
+if("serviceWorker" in navigator){
+ navigator.serviceWorker.register("sw.js").then(async reg=>{
+  try{ if("periodicSync" in reg){ const st=await navigator.permissions.query({name:"periodic-background-sync"});
+   if(st.state==="granted") await reg.periodicSync.register("jobs-check",{minInterval:6*60*60*1000}); } }catch(_){}
+ }).catch(()=>{});
+}
+// Job alerts (push notifications + icon badge). iPhone needs the app opened from its home-screen icon.
+const VAPID = "BGIzWRbaQpVpjgLLSrwKM8oVTh2-4-GGH5t2I_JE4OMDEcmJLZfwJ03ZSs4BNqttOt7uJrPrrVd-xYTlHDD2zsA";
+const b64u = s => { const p = "=".repeat((4 - s.length % 4) % 4); const r = atob((s + p).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(r, c => c.charCodeAt(0)); };
+const standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+async function showSub(sub){ $("alCode").value = JSON.stringify(sub); $("alOut").hidden = false; $("alBtn").hidden = true;
+ $("alTxt").textContent = "Job alerts are on for this phone."; }
+if("serviceWorker" in navigator && "PushManager" in window){
+ $("alerts").hidden = false;
+ if(!standalone){ $("alTxt").textContent = "To get alerts on an iPhone, open this from its home-screen icon (Share, then Add to Home Screen) and turn them on there."; $("alBtn").hidden = true; }
+ navigator.serviceWorker.ready.then(r=>r.pushManager.getSubscription()).then(s=>{ if(s) showSub(s); }).catch(()=>{});
+ $("alBtn").addEventListener("click", async ()=>{
+  try{
+   const perm = await Notification.requestPermission();
+   if(perm !== "granted"){ $("alTxt").textContent = "Notifications weren't allowed. You can turn them on in Settings, Notifications, Teacher Jobs."; return; }
+   const reg = await navigator.serviceWorker.ready;
+   const sub = await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:b64u(VAPID)});
+   showSub(sub);
+  }catch(e){ $("alTxt").textContent = "Couldn't turn on alerts: " + (e && e.message || e); }
+ });
+ $("alCopy").addEventListener("click", async ()=>{
+  try{ await navigator.clipboard.writeText($("alCode").value); $("alCopied").textContent = "Copied"; }
+  catch(_){ $("alCode").select(); $("alCopied").textContent = "Select the text and copy it"; }
+ });
 }
 loadJobs();
 $("f").addEventListener("submit",()=>loadJobs());
