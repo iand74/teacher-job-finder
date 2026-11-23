@@ -48,7 +48,7 @@ if not sub or not key:
 from pywebpush import webpush, WebPushException
 try:
     webpush(subscription_info=json.loads(sub), data=json.dumps(payload), vapid_private_key=key,
-            vapid_claims={"sub": "https://iand74.github.io/teacher-job-finder/"}, ttl=86400)
+            vapid_claims={"sub": "https://iand74.github.io"}, ttl=86400)
     print("Sent:", payload["title"])
 except WebPushException as e:
     print("Push failed:", e, getattr(e, "response", None) and e.response.text); sys.exit(1)
