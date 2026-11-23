@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Primary Teacher Job Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: practical, calm, like a good local survey map with a legend
+   IDEA: an Ordnance-style map sheet centred on your postcode, rings for radius
+   PICTURE: live radius map with school pins at true relative positions
+   COLOUR and TYPE: survey-map card — sea, land, contour brown, route magenta; Overpass
+   LAYOUT: controls + map up top, then ranked job cards (full time first, nearest first) */
+:root{color-scheme:light dark;
+ --bg:light-dark(#fbfbf2,#0d1c24);--ink:light-dark(#13242e,#e8f0f2);--mute:light-dark(#4f5f66,#9fb3bb);
+ --sea:light-dark(#bfe3ee,#123341);--card:light-dark(#ffffff,#132a35);--line:light-dark(#dcdccc,#24414e);
+ --brown:light-dark(#a8551b,#e0965c);--mag:light-dark(#d6127e,#ff5fb0);--ok:light-dark(#0d6b4f,#5fd3a8)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Overpass,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(20px,4vw,48px) max(5vw,16px);max-width:1240px;margin:0 auto}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.05;margin:0 0 6px;font-weight:800;text-wrap:balance}
+.upd{margin:0 0 4px;font-size:14px;font-weight:600;color:var(--brown)}
+.sub{color:var(--mute);margin:0 0 18px;font-size:15px}
+.top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px;align-items:stretch}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+label{display:block;font-weight:600;font-size:14px;margin:0 0 6px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+input[type=text]{font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);text-transform:uppercase;flex:1;min-height:44px}
+button{font:inherit;font-weight:600;font-size:15px;min-height:44px;padding:0 16px;border-radius:10px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--mag);outline-offset:2px}
+input[type=range]{width:100%;accent-color:var(--mag);min-height:44px}
+.rad{display:flex;justify-content:space-between;align-items:baseline}
+.rad b{font-size:22px;white-space:nowrap}
+.msg{font-size:14px;color:var(--brown);min-height:1.4em;margin:6px 0 10px}
+.chk{display:flex;gap:8px;align-items:center;font-weight:400;font-size:14px;min-height:44px}
+.chk input{width:20px;height:20px;accent-color:var(--mag)}
+.stats{display:flex;gap:18px;flex-wrap:wrap;margin-top:8px;font-size:14px;color:var(--mute)}
+.stats b{display:block;font-size:26px;color:var(--ink);line-height:1.1}
+.fig{position:relative;min-height:340px;background:var(--sea);border-radius:14px;overflow:hidden}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+h2{font-size:22px;margin:28px 0 4px}
+.note{font-size:14px;color:var(--mute);margin:0 0 12px}
+.jobs{display:grid;gap:14px}
+.job{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 16px}
+.job.closed{opacity:.55}
+.num{grid-row:span 3;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;background:var(--mag)}
+.job.tier2 .num{background:var(--brown)}
+.job h3{margin:0;font-size:18px;line-height:1.25}
+.school{font-weight:600}
+.dist{text-align:right;white-space:nowrap;font-size:14px;color:var(--mute)}
+.dist b{display:block;font-size:20px;color:var(--ink)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.tag{font-size:13px;padding:2px 9px;border-radius:99px;border:1px solid var(--line);white-space:nowrap}
+.tag.ft{background:var(--ok);color:var(--card);border-color:transparent}
+.tag.warn{color:var(--brown);border-color:var(--brown)}
+.about{font-size:15px;margin:4px 0;grid-column:2/4}
+.meta{grid-column:2/4;font-size:14px;color:var(--mute)}
+.links{grid-column:2/4;display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;font-size:14px}
+a{color:var(--mag);font-weight:600}
+.empty{padding:18px;border:1.5px dashed var(--line);border-radius:14px;color:var(--mute)}
+.src{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.src a{display:block;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:12px;text-decoration:none;min-height:44px}
+.src span{display:block;font-weight:400;font-size:13px;color:var(--mute)}
+footer{font-size:13px;color:var(--mute)}
+@media(max-width:760px){.top{grid-template-columns:minmax(0,1fr)}.fig{min-height:300px}}
+@media(max-width:600px){.job{grid-template-columns:auto minmax(0,1fr)}.dist{grid-column:2;text-align:left}.dist b{display:inline;margin-right:6px}.about,.meta,.links{grid-column:1/3}}
+@media(prefers-reduced-motion:no-preference){.pin{transition:transform .4s ease}}
+</style>
+</head>
+<body>
+<div class="band">
+ <h1 id="title">Primary teaching jobs near HX4 8LG</h1>
+ <p class="upd" id="upd" role="status"></p>
+ <p class="sub">Class teacher vacancies at junior, infant and primary schools. Full-time posts first, then maternity cover and part-time, nearest first within each group.</p>
+ <div class="top">
+  <div class="panel">
+   <form id="f">
+    <label for="pc">Your postcode</label>
+    <div class="row"><input id="pc" type="text" value="HX4 8LG" autocomplete="postal-code" spellcheck="false"><button type="submit">Search</button></div>
+    <div class="msg" id="msg" role="status"></div>
+    <div class="rad"><label for="r">Search radius</label><b id="rv">10 miles</b></div>
+    <input id="r" type="range" min="2" max="30" step="1" value="10">
+    <label class="chk"><input id="closed" type="checkbox"> Show jobs that have already closed</label>
+   </form>
+   <div class="stats"><div><b id="sFt">0</b>full time</div><div><b id="sOt">0</b>part time / cover</div><div><b id="sNear">–</b>nearest</div></div>
+  </div>
+  <div class="fig" id="fig" aria-label="Map of jobs around your postcode"><svg id="map"></svg></div>
+ </div>
+
+ <h2>Full-time posts</h2>
+ <p class="note">Prioritised. Fixed-term full-time posts are included here and tagged.</p>
+ <div class="jobs" id="ft"></div>
+
+ <h2>Maternity cover, part time and unconfirmed</h2>
+ <p class="note">Still worth a look. Posts where the hours weren't stated are listed here until confirmed.</p>
+ <div class="jobs" id="ot"></div>
+
+ <h2>Search the live job sites</h2>
+ <p class="note">These links open each site's latest listings for your postcode and radius, so you can catch anything posted after this page was last updated.</p>
+ <div class="src" id="src"></div>
+
+ <h2>How this works</h2>
+ <footer>
+  <p>The job list is refreshed by a daily search of LG Jobs (where Calderdale, Kirklees and Bradford councils advertise), council and trust listings, Tes and other job boards, and this page reloads it every time you open it. Always check the advert before applying, since schools can close a vacancy early.</p>
+  <p>Distances are straight-line from the centre of your postcode area. Drive times are estimates for West Yorkshire roads (about 1.35× the straight-line distance at an average 22 mph). Use the "Directions" link for an exact time. Postcode lookup works offline for Calderdale, Kirklees and nearby Bradford, Wakefield and Rochdale areas. HX4 8LG is pinned to its exact spot, while other postcodes use their district centre.</p>
+ </footer>
+</div>
+
+<script>
+{
+const TODAY = new Date();
+// Postcode district centres (approximate), plus exact default
+const PC = {"HX48LG":[53.6763,-1.8642],
+ HX1:[53.721,-1.870],HX2:[53.737,-1.915],HX3:[53.727,-1.835],HX4:[53.672,-1.868],HX5:[53.686,-1.836],HX6:[53.700,-1.925],HX7:[53.742,-2.010],
+ HD1:[53.646,-1.785],HD2:[53.668,-1.772],HD3:[53.652,-1.832],HD4:[53.624,-1.800],HD5:[53.645,-1.745],HD6:[53.701,-1.781],HD7:[53.615,-1.885],HD8:[53.598,-1.690],HD9:[53.578,-1.790],
+ BD1:[53.795,-1.752],BD2:[53.810,-1.740],BD3:[53.797,-1.725],BD4:[53.780,-1.715],BD5:[53.778,-1.755],BD6:[53.768,-1.785],BD7:[53.785,-1.785],BD8:[53.800,-1.785],BD9:[53.810,-1.790],BD10:[53.830,-1.725],BD11:[53.750,-1.690],BD12:[53.745,-1.770],BD13:[53.775,-1.870],BD14:[53.783,-1.820],BD15:[53.810,-1.830],BD19:[53.724,-1.712],
+ WF13:[53.684,-1.650],WF14:[53.680,-1.695],WF15:[53.706,-1.715],WF16:[53.703,-1.678],WF17:[53.714,-1.632],WF12:[53.685,-1.610],
+ OL14:[53.713,-2.098],OL15:[53.645,-2.100],OL3:[53.580,-2.010],LS12:[53.795,-1.590],LS27:[53.748,-1.600],LS28:[53.810,-1.665]};
+
+let JOBS = [], UPDATED = null;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let origin = PC.HX48LG, originLabel = "HX4 8LG", radius = 10;
+
+const miles = (a,b) => {const R=3958.8,r=Math.PI/180,dLat=(b[0]-a[0])*r,dLon=(b[1]-a[1])*r;
+ const h=Math.sin(dLat/2)**2+Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(h));};
+const driveMin = m => Math.max(3,Math.round(m*1.35/22*60+3));
+const isFT = j => j.pattern==="Full time";
+const isClosed = j => new Date(j.closes) < TODAY;
+
+function lookup(raw){
+ const pc = raw.toUpperCase().replace(/\s+/g,"");
+ if(!/^[A-Z]{1,2}\d[A-Z\d]?\d[A-Z]{2}$/.test(pc) && !/^[A-Z]{1,2}\d[A-Z\d]?$/.test(pc)) return {err:"That doesn't look like a UK postcode. Try something like HX4 8LG."};
+ if(PC[pc]) return {ll:PC[pc],label:raw.toUpperCase().trim(),exact:true};
+ const out = pc.length>4 ? pc.slice(0,-3) : pc;
+ if(PC[out]) return {ll:PC[out],label:raw.toUpperCase().trim(),exact:false};
+ return {err:"This page can only place postcodes in Calderdale, Kirklees and nearby areas (HX, HD, BD, WF, OL). Use the live job-site links below for anywhere else."};
+}
+
+function render(){
+ $("title").textContent = "Primary teaching jobs near " + originLabel;
+ $("rv").textContent = radius + " miles";
+ const showClosed = $("closed").checked;
+ const list = JOBS.map(j=>({...j,d:miles(origin,j.ll)}))
+  .filter(j=>j.d<=radius && (showClosed||!isClosed(j)))
+  .sort((a,b)=>(isFT(b)-isFT(a))||(a.d-b.d));
+ const ft = list.filter(isFT), ot = list.filter(j=>!isFT(j));
+ const card = (j,i,tier) => {
+  const closed = isClosed(j), dm = driveMin(j.d);
+  const dir = "https://www.google.com/maps/dir/?api=1&travelmode=driving&origin="+encodeURIComponent(originLabel)+"&destination="+encodeURIComponent(j.school+", "+j.place.replace(" (location approximate)",""));
+  return `<article class="job ${tier}${closed?" closed":""}">
+   <div class="num">${i+1}</div>
+   <div><h3>${esc(j.title)}</h3><div class="school">${esc(j.school)}</div>
+    <div class="tags"><span class="tag ${isFT(j)?"ft":"warn"}">${esc(j.pattern)}</span>${j.fixed?'<span class="tag warn">Fixed term</span>':""}<span class="tag">${esc(j.contract)}</span>${closed?'<span class="tag warn">Closed</span>':`<span class="tag">Closes ${esc(j.closesTxt)}</span>`}</div></div>
+   <div class="dist"><b>≈ ${dm} min</b>${j.d.toFixed(1)} mi away${j.approx?" (approx.)":""}</div>
+   <p class="about">${esc(j.about)}</p>
+   <div class="meta">${esc(j.place)} · Salary: ${esc(j.salary)}${j.extra?" · "+esc(j.extra):""}</div>
+   <div class="links"><a href="${esc(j.url)}" target="_blank" rel="noopener">View advert</a>${j.alt?`<a href="${esc(j.alt)}" target="_blank" rel="noopener">Listing on LG Jobs</a>`:""}${j.web?`<a href="${esc(j.web)}" target="_blank" rel="noopener">School website</a>`:""}<a href="${esc(dir)}" target="_blank" rel="noopener">Directions</a></div>
+  </article>`;};
+ const empty = t => `<div class="empty">No ${t} posts within ${radius} miles. Try widening the radius or check the live job sites below.</div>`;
+ $("ft").innerHTML = ft.length ? ft.map((j,i)=>card(j,i,"tier1")).join("") : empty("full-time");
+ $("ot").innerHTML = ot.length ? ot.map((j,i)=>card(j,ft.length+i,"tier2")).join("") : empty("part-time or cover");
+ $("sFt").textContent = ft.length; $("sOt").textContent = ot.length;
+ const near = list.slice().sort((a,b)=>a.d-b.d)[0];
+ $("sNear").textContent = near ? "≈ "+driveMin(near.d)+" min" : "–";
+ drawMap(ft.concat(ot));
+ renderSources();
+}
+
+const map = $("map");
+let lastList = [];
+function drawMap(list){
+ if(list) lastList = list;
+ const W = map.clientWidth, H = map.clientHeight; if(!W||!H) return;
+ const cx=W/2, cy=H/2, pxPerMile = (Math.min(W,H)/2-28)/radius;
+ const kmLon = Math.cos(origin[0]*Math.PI/180);
+ const pos = ll => [cx+(ll[1]-origin[1])*69.17*kmLon*pxPerMile, cy-(ll[0]-origin[0])*69.0*pxPerMile];
+ let rings = ""; const step = radius<=6?1:radius<=15?5:10;
+ for(let m=step;m<=radius;m+=step){const r=m*pxPerMile;
+  rings += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--brown)" stroke-opacity=".45" stroke-dasharray="${m===radius?"0":"3 5"}"/>`;
+  if(W>360) rings += `<text x="${cx+4}" y="${cy-r+14}" font-size="12" fill="var(--brown)">${m} mi</text>`;}
+ const R = radius*pxPerMile;
+ const pins = lastList.map((j,i)=>{const [x,y]=pos(j.ll);const c=isFT(j)?"var(--mag)":"var(--brown)";
+  return `<g class="pin" transform="translate(${x},${y})"><title>${esc(j.school)} – ${j.d.toFixed(1)} mi</title><circle r="13" fill="${c}" stroke="#fff" stroke-width="2"/><text y="4.5" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">${i+1}</text></g>`;}).join("");
+ map.innerHTML = `<defs><radialGradient id="lg"><stop offset="0" stop-color="var(--bg)"/><stop offset="1" stop-color="var(--bg)" stop-opacity=".75"/></radialGradient></defs>
+  <circle cx="${cx}" cy="${cy}" r="${R}" fill="url(#lg)"/>${rings}
+  <g transform="translate(${cx},${cy})"><circle r="8" fill="var(--ink)"/><circle r="15" fill="none" stroke="var(--ink)" stroke-width="2"/></g>
+  <text x="${cx}" y="${cy+32}" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">${esc(originLabel)}</text>${pins}
+  <text x="12" y="${H-12}" font-size="12" fill="var(--ink)" opacity=".7">● full time  ● cover / part time</text>`;
+}
+const ro = new ResizeObserver(()=>drawMap()); ro.observe(map);
+
+function renderSources(){
+ const q = encodeURIComponent(originLabel), r = radius;
+ const S = [
+  ["Teaching Vacancies (GOV.UK)","Official DfE site, primary filter",`https://teaching-vacancies.service.gov.uk/jobs?location=${q}&radius=${r}&phases%5B%5D=primary`],
+  ["LG Jobs – Calderdale","Calderdale Council school posts","https://www.lgjobs.com/jobs/teaching/calderdale"],
+  ["LG Jobs – Kirklees","Kirklees Council school posts","https://www.lgjobs.com/jobs/teaching/kirklees"],
+  ["LG Jobs – Bradford","Bradford Council school posts","https://www.lgjobs.com/jobs/teaching/bradford"],
+  ["Tes jobs","Primary teacher roles, West Yorkshire","https://www.tes.com/jobs/browse/primary-teacher-west-yorkshire"],
+  ["MyNewTerm","Used by many Calderdale academies","https://mynewterm.com/jobs"],
+  ["Indeed","Primary teacher, your postcode and radius",`https://uk.indeed.com/jobs?q=primary+teacher&l=${q}&radius=${r}`],
+  ["Find a Job (DWP)","Mirrors Teaching Vacancies adverts",`https://findajob.dwp.gov.uk/search?q=primary+teacher&w=${q}&d=${r}`]];
+ $("src").innerHTML = S.map(s=>`<a href="${esc(s[2])}" target="_blank" rel="noopener">${esc(s[0])}<span>${esc(s[1])}</span></a>`).join("");
+}
+
+$("f").addEventListener("submit",e=>{e.preventDefault();
+ const res = lookup($("pc").value);
+ if(res.err){$("msg").textContent=res.err;return;}
+ origin=res.ll; originLabel=res.label;
+ $("msg").textContent = res.exact?"":"Using the centre of the "+res.label.replace(/\s?\d[A-Z]{2}$/,"")+" district, so distances are approximate.";
+ try{localStorage.setItem("tjf",JSON.stringify({pc:res.label,r:radius}))}catch(_){}
+ render();});
+$("r").addEventListener("input",e=>{radius=+e.target.value;try{localStorage.setItem("tjf",JSON.stringify({pc:originLabel,r:radius}))}catch(_){}render();});
+$("closed").addEventListener("change",render);
+
+try{const s=JSON.parse(localStorage.getItem("tjf")||"null");
+ if(s){const res=lookup(s.pc);if(!res.err){origin=res.ll;originLabel=res.label;$("pc").value=res.label;}
+  if(s.r){radius=s.r;$("r").value=s.r;}}}catch(_){}
+async function loadJobs(){
+ $("upd").textContent = "Loading latest jobs…";
+ try{
+  const r = await fetch("jobs.json?t="+Date.now(),{cache:"no-store"});
+  if(!r.ok) throw 0;
+  const d = await r.json();
+  JOBS = Array.isArray(d.jobs)?d.jobs:[]; UPDATED = d.updated?new Date(d.updated):null;
+  $("upd").textContent = UPDATED ? "Job list last updated "+UPDATED.toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+ }catch(_){ $("upd").textContent = "Couldn't load the job list. Check your connection and tap Search again."; }
+ render();
+}
+loadJobs();
+$("f").addEventListener("submit",()=>loadJobs());
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")loadJobs();});
+}
+</script>
+</body>
+</html>

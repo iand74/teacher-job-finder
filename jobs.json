@@ -1,0 +1,111 @@
+{
+ "updated": "2026-11-23T20:45:00Z",
+ "jobs": [
+  {
+   "title": "Class Teacher (Year 4/5 mixed class)",
+   "school": "Holywell Green Primary School",
+   "place": "Holywell Green, Halifax HX4",
+   "ll": [
+    53.6625,
+    -1.8615
+   ],
+   "pattern": "Full time",
+   "contract": "Not stated",
+   "salary": "Teachers' pay scale",
+   "closes": "2026-11-30T12:00",
+   "closesTxt": "Mon 30 Nov, noon",
+   "about": "A village primary just outside Halifax, on your doorstep. The advert highlights a friendly, supportive staff team, good resources, a strong focus on professional development with support for early career teachers, and links with other local schools through a cluster. Visits welcomed (01422 374369).",
+   "extra": "Interviews week beginning 7 December.",
+   "url": "https://www.lgjobs.com/job/class-teacher-holywell-green-primary-school-120724",
+   "web": "https://www.holywellgreenschool.co.uk"
+  },
+  {
+   "title": "Teacher",
+   "school": "Luddendenfoot Academy",
+   "place": "Burnley Road, Luddendenfoot HX2 6AU",
+   "ll": [
+    53.7195,
+    -1.9535
+   ],
+   "pattern": "Full time",
+   "contract": "Not stated",
+   "salary": "£34,069 – £46,940",
+   "closes": "2026-11-30T23:59",
+   "closesTxt": "30 Nov",
+   "about": "A primary academy in the Calder Valley village of Luddendenfoot, between Sowerby Bridge and Mytholmroyd. The advert doesn't describe the school further, so check its website or ring before applying.",
+   "extra": "Apply through MyNewTerm.",
+   "url": "https://mynewterm.com/jobs/137699/EDV-2026-LA-53709",
+   "alt": "https://www.lgjobs.com/job/teacher-luddendenfoot-academy-118801"
+  },
+  {
+   "title": "Reception Class Teacher",
+   "school": "Honley CE (VC) Junior, Infant & Nursery School",
+   "place": "Jaggar Lane, Honley HD9 6BT",
+   "ll": [
+    53.6035,
+    -1.796
+   ],
+   "pattern": "Full time",
+   "contract": "Fixed term to 31 Aug 2027",
+   "salary": "MPS / UPS (ECTs welcome)",
+   "closes": "2026-11-27T12:00",
+   "closesTxt": "Fri 27 Nov, noon",
+   "about": "A Church of England village school in Honley, near Holmfirth, taking children from nursery to Year 6. It describes itself as a safe, happy and caring family environment with well-behaved, motivated pupils and a committed team of staff and governors.",
+   "extra": "Interviews w/c 30 Nov. Apply by emailing the Kirklees form to office@honleyjin.co.uk (01484 508001).",
+   "url": "https://www.lgjobs.com/job/reception-class-teacher-honley-ce-vc-junior-infant-nursery-school-128032",
+   "fixed": true
+  },
+  {
+   "title": "Teacher",
+   "school": "Ravensthorpe CE (VC) Junior School",
+   "place": "Ravensthorpe, Dewsbury WF13",
+   "ll": [
+    53.677,
+    -1.66
+   ],
+   "pattern": "Not stated",
+   "contract": "Not stated",
+   "salary": "Not stated",
+   "closes": "2026-12-04T12:00",
+   "closesTxt": "Early Dec (under 2 weeks)",
+   "about": "A Church of England junior school (ages 7–11) in Ravensthorpe on the west side of Dewsbury. Kirklees Council is advertising this post for the school, alongside a SENDCo role. Open the advert for hours and contract details.",
+   "extra": "Closing date given only as 'less than 2 weeks', so check the advert.",
+   "url": "https://www.lgjobs.com/job/teacher-ravensthorpe-ce-vc-junior-school-124705"
+  },
+  {
+   "title": "Key Stage 2 Teacher (Upper KS2), 2 days a week",
+   "school": "Bolton Brow Primary Academy",
+   "place": "Sowerby Bridge HX6 2BA",
+   "ll": [
+    53.7065,
+    -1.8995
+   ],
+   "pattern": "Part time",
+   "contract": "Permanent",
+   "salary": "Teachers' pay scale, pro rata",
+   "closes": "2026-11-23T09:00",
+   "closesTxt": "Mon 23 Nov, 9am",
+   "about": "Rated Good by Ofsted (November 2022) and part of a multi-academy trust. The school describes an inclusive, nurturing environment that helps children become curious, confident and resilient, and the trust runs termly staff wellbeing events. Free parking.",
+   "extra": "Start January 2027 preferred. Interviews Fri 27 Nov.",
+   "url": "https://www.lgjobs.com/job/key-stage-2-teacher-bolton-brow-primary-academy-118332"
+  },
+  {
+   "title": "Year 2 Teacher (12-month maternity cover)",
+   "school": "Rainbow Primary Leadership Academy",
+   "place": "Bradford (location approximate)",
+   "ll": [
+    53.8,
+    -1.735
+   ],
+   "pattern": "Maternity cover",
+   "contract": "Fixed term, 12 months",
+   "salary": "Not stated",
+   "closes": "2026-11-29T23:59",
+   "closesTxt": "29 Nov",
+   "about": "A primary academy in Bradford, listed on Tes. The listing doesn't include more detail about the school. It's outside the default 10 miles, so widen the radius to see it.",
+   "extra": "",
+   "url": "https://www.tes.com/jobs/browse/primary-teacher-west-yorkshire",
+   "approx": true
+  }
+ ]
+}
