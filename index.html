@@ -103,7 +103,7 @@ footer{font-size:13px;color:var(--mute)}
   <div class="fig" id="fig" aria-label="Map of jobs around your postcode"><svg id="map"></svg></div>
  </div>
 
- <div class="panel alerts" id="alerts" hidden>
+ <div class="panel alerts" id="alerts">
   <h2 style="margin-top:0">Job alerts on this iPhone</h2>
   <p class="note" id="alTxt">Get a notification, and a number on the app icon, when the morning update finds new jobs.</p>
   <button type="button" id="alBtn">Turn on job alerts</button>
@@ -282,8 +282,12 @@ const b64u = s => { const p = "=".repeat((4 - s.length % 4) % 4); const r = atob
 const standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
 async function showSub(sub){ $("alCode").value = JSON.stringify(sub); $("alOut").hidden = false; $("alBtn").hidden = true;
  $("alTxt").textContent = "Job alerts are on for this phone."; }
-if("serviceWorker" in navigator && "PushManager" in window){
- $("alerts").hidden = false;
+if(!("serviceWorker" in navigator && "PushManager" in window)){
+ $("alBtn").hidden = true;
+ $("alTxt").textContent = standalone
+  ? "This iPhone can't receive web app alerts. It needs iOS 16.4 or later (Settings, General, Software Update)."
+  : "To turn on alerts: in Safari tap Share, then Add to Home Screen. Open the app from that new icon and this box will show a Turn on job alerts button.";
+} else {
  if(!standalone){ $("alTxt").textContent = "To get alerts on an iPhone, open this from its home-screen icon (Share, then Add to Home Screen) and turn them on there."; $("alBtn").hidden = true; }
  navigator.serviceWorker.ready.then(r=>r.pushManager.getSubscription()).then(s=>{ if(s) showSub(s); }).catch(()=>{});
  $("alBtn").addEventListener("click", async ()=>{
