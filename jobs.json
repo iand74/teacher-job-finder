@@ -1,42 +1,6 @@
 {
- "updated": "2026-11-23T20:45:00Z",
+ "updated": "2026-11-25T08:39:35Z",
  "jobs": [
-  {
-   "title": "Class Teacher (Year 4/5 mixed class)",
-   "school": "Holywell Green Primary School",
-   "place": "Holywell Green, Halifax HX4",
-   "ll": [
-    53.6625,
-    -1.8615
-   ],
-   "pattern": "Full time",
-   "contract": "Not stated",
-   "salary": "Teachers' pay scale",
-   "closes": "2026-11-30T12:00",
-   "closesTxt": "Mon 30 Nov, noon",
-   "about": "A village primary just outside Halifax, on your doorstep. The advert highlights a friendly, supportive staff team, good resources, a strong focus on professional development with support for early career teachers, and links with other local schools through a cluster. Visits welcomed (01422 374369).",
-   "extra": "Interviews week beginning 7 December.",
-   "url": "https://www.lgjobs.com/job/class-teacher-holywell-green-primary-school-120724",
-   "web": "https://www.holywellgreenschool.co.uk"
-  },
-  {
-   "title": "Teacher",
-   "school": "Luddendenfoot Academy",
-   "place": "Burnley Road, Luddendenfoot HX2 6AU",
-   "ll": [
-    53.7195,
-    -1.9535
-   ],
-   "pattern": "Full time",
-   "contract": "Not stated",
-   "salary": "£34,069 – £46,940",
-   "closes": "2026-11-30T23:59",
-   "closesTxt": "30 Nov",
-   "about": "A primary academy in the Calder Valley village of Luddendenfoot, between Sowerby Bridge and Mytholmroyd. The advert doesn't describe the school further, so check its website or ring before applying.",
-   "extra": "Apply through MyNewTerm.",
-   "url": "https://mynewterm.com/jobs/137699/EDV-2026-LA-53709",
-   "alt": "https://www.lgjobs.com/job/teacher-luddendenfoot-academy-118801"
-  },
   {
    "title": "Reception Class Teacher",
    "school": "Honley CE (VC) Junior, Infant & Nursery School",
@@ -56,40 +20,6 @@
    "fixed": true
   },
   {
-   "title": "Teacher",
-   "school": "Ravensthorpe CE (VC) Junior School",
-   "place": "Ravensthorpe, Dewsbury WF13",
-   "ll": [
-    53.677,
-    -1.66
-   ],
-   "pattern": "Not stated",
-   "contract": "Not stated",
-   "salary": "Not stated",
-   "closes": "2026-12-04T12:00",
-   "closesTxt": "Early Dec (under 2 weeks)",
-   "about": "A Church of England junior school (ages 7–11) in Ravensthorpe on the west side of Dewsbury. Kirklees Council is advertising this post for the school, alongside a SENDCo role. Open the advert for hours and contract details.",
-   "extra": "Closing date given only as 'less than 2 weeks', so check the advert.",
-   "url": "https://www.lgjobs.com/job/teacher-ravensthorpe-ce-vc-junior-school-124705"
-  },
-  {
-   "title": "Key Stage 2 Teacher (Upper KS2), 2 days a week",
-   "school": "Bolton Brow Primary Academy",
-   "place": "Sowerby Bridge HX6 2BA",
-   "ll": [
-    53.7065,
-    -1.8995
-   ],
-   "pattern": "Part time",
-   "contract": "Permanent",
-   "salary": "Teachers' pay scale, pro rata",
-   "closes": "2026-11-23T09:00",
-   "closesTxt": "Mon 23 Nov, 9am",
-   "about": "Rated Good by Ofsted (November 2022) and part of a multi-academy trust. The school describes an inclusive, nurturing environment that helps children become curious, confident and resilient, and the trust runs termly staff wellbeing events. Free parking.",
-   "extra": "Start January 2027 preferred. Interviews Fri 27 Nov.",
-   "url": "https://www.lgjobs.com/job/key-stage-2-teacher-bolton-brow-primary-academy-118332"
-  },
-  {
    "title": "Year 2 Teacher (12-month maternity cover)",
    "school": "Rainbow Primary Leadership Academy",
    "place": "Bradford (location approximate)",
@@ -105,6 +35,80 @@
    "about": "A primary academy in Bradford, listed on Tes. The listing doesn't include more detail about the school. It's outside the default 10 miles, so widen the radius to see it.",
    "extra": "",
    "url": "https://www.tes.com/jobs/browse/primary-teacher-west-yorkshire",
+   "approx": true
+  },
+  {
+   "title": "Class Teacher (Year 4/5 mixed class)",
+   "school": "Holywell Green Primary School",
+   "place": "Holywell Green, Halifax HX4",
+   "ll": [
+    53.6625,
+    -1.8615
+   ],
+   "pattern": "Full time",
+   "contract": "Not stated",
+   "salary": "Teachers' pay scale",
+   "closes": "2026-11-30T12:00",
+   "closesTxt": "Mon 30 Nov, noon",
+   "about": "A village primary just outside Halifax, on your doorstep. The advert highlights a friendly, supportive staff team, good resources, a strong focus on professional development with support for early career teachers, and links with other local schools through a cluster. Visits welcomed (01422 374369).",
+   "extra": "Interviews week beginning 7 December.",
+   "url": "https://www.lgjobs.com/job/class-teacher-holywell-green-primary-school-120724",
+   "web": "https://www.holywellgreenschool.co.uk"
+  },
+  {
+   "title": "Class Teacher (maternity cover)",
+   "school": "Ravensthorpe CE (VC) Junior School",
+   "place": "Myrtle Road, Ravensthorpe, Dewsbury WF13 3AS",
+   "ll": [
+    53.677,
+    -1.66
+   ],
+   "pattern": "Maternity cover",
+   "contract": "Fixed term (maternity cover, March 2027)",
+   "salary": "MPS / UPS",
+   "closes": "2026-11-30T23:55",
+   "closesTxt": "Mon 30 Nov, 11:55pm",
+   "about": "A four-form-entry Church of England junior school (ages 7–11) in Ravensthorpe on the west side of Dewsbury, rated Good by Ofsted in 2023. Early career teachers are welcome to apply.",
+   "extra": "Full time. Email the Kirklees application form to office.ravensthorpejun@kirkleeseducation.uk (letter max two sides A4). Visits welcome: Natalie Stalmach, 01924 907082.",
+   "url": "https://www.lgjobs.com/job/teacher-ravensthorpe-ce-vc-junior-school-124705",
+   "web": "https://www.ravensthorpejuniorschool.co.uk/home",
+   "approx": true
+  },
+  {
+   "title": "Teacher (maternity cover, 0.6 FTE)",
+   "school": "Luddendenfoot Academy",
+   "place": "Burnley Road, Luddendenfoot HX2 6AU",
+   "ll": [
+    53.7195,
+    -1.9535
+   ],
+   "pattern": "Maternity cover",
+   "contract": "Fixed term (maternity cover)",
+   "salary": "M1–M6 £34,069 – £46,940 FTE (£20,441 – £28,164 actual for 0.6)",
+   "closes": "2026-11-30T23:59",
+   "closesTxt": "Mon 30 Nov, midnight",
+   "about": "A primary academy in the Calder Valley village of Luddendenfoot, between Sowerby Bridge and Mytholmroyd, part of Polaris Multi Academy Trust (six primaries, one secondary and two nurseries). The advert stresses high standards and weekly CPD for staff.",
+   "extra": "0.6 FTE: full days Mon, Tue, Fri (full-time hours possible). Starts 1 Jan 2027; proposed interview 6 Dec. Apply online via MyNewTerm; visits welcome via the school office.",
+   "url": "https://mynewterm.com/jobs/137699/EDV-2026-LA-53709",
+   "alt": "https://www.lgjobs.com/job/teacher-luddendenfoot-academy-118801"
+  },
+  {
+   "title": "Primary Teacher (maternity cover, part time)",
+   "school": "The Vale Primary Academy",
+   "place": "Ferrybridge Road, Knottingley WF11 8JF",
+   "ll": [
+    53.705,
+    -1.258
+   ],
+   "pattern": "Maternity cover",
+   "contract": "Fixed term (maternity cover)",
+   "salary": "MPR / UPR (£34,069 – £52,835), pro rata",
+   "closes": "2026-12-07T23:59",
+   "closesTxt": "Mon 7 Dec",
+   "about": "A Delta Academies Trust primary for just over 250 children aged 3–11, on the Knottingley/Ferrybridge boundary a few miles from Pontefract and Castleford. It's well outside the default 10 miles, so widen the radius to see it.",
+   "extra": "Part time, starts March 2027. Apply via the Delta Trust careers site; visits by appointment on 01977 722458.",
+   "url": "https://www.tes.com/jobs/vacancy/primary-teacher-knottingley-2362846",
+   "alt": "https://deltatrust.org.uk/careers-with-delta/",
    "approx": true
   }
  ]
